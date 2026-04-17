@@ -37,20 +37,6 @@ export default function AdminAuth() {
         }
     };
 
-    const handleSetup = async () => {
-        try {
-            const res = await fetch('/api/auth/setup', { method: 'POST' });
-            const data = await res.json();
-            if (res.ok) {
-                alert(`Setup successful! Please login with:\nEmail: ${data.email}\nPassword: ${data.password}`);
-            } else {
-                alert(data.error);
-            }
-        } catch (err) {
-            alert("Setup failed: " + err.message);
-        }
-    };
-
     return (
         <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--color-bg)', padding: '20px' }}>
             <div className="glass" style={{ width: '100%', maxWidth: '450px', padding: '40px', borderRadius: '24px', position: 'relative', overflow: 'hidden' }}>
@@ -100,11 +86,7 @@ export default function AdminAuth() {
                     </button>
                 </form>
 
-                <div style={{ textAlign: 'center', marginTop: '24px', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
-                    <button onClick={handleSetup} style={{ background: 'none', border: 'none', color: 'var(--color-primary-light)', cursor: 'pointer', textDecoration: 'underline' }}>
-                        Run First-Time Setup
-                    </button>
-                </div>
+
             </div>
         </div>
     );
