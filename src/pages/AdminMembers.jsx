@@ -6,6 +6,13 @@ export default function AdminMembers() {
     const [members, setMembers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedMember, setSelectedMember] = useState(null);
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [newMemberData, setNewMemberData] = useState({
+        name: '', email: '', role: 'MEMBER', position: '',
+        fieldOfStudy: '', yearOfStudy: '', registrationNumber: '',
+        contactInfo: '', password: ''
+    });
+    const [isSaving, setIsSaving] = useState(false);
 
     const fetchMembers = async () => {
         try {
@@ -19,6 +26,53 @@ export default function AdminMembers() {
     };
 
     useEffect(() => { fetchMembers(); }, []);
+
+    const handleNameChange = (e) => {
+        const newName = e.target.value;
+        const currentFirstName = newMemberData.name.split(' ')[0];
+        const newFirstName = newName.split(' ')[0];
+
+        setNewMemberData(prev => {
+            const shouldUpdatePassword = !prev.password || prev.password === currentFirstName;
+            return {
+                ...prev,
+                name: newName,
+                ...(shouldUpdatePassword ? { password: newFirstName } : {})
+            };
+        });
+    };
+
+    const handleAddSubmit = async (e) => {
+        e.preventDefault();
+        setIsSaving(true);
+        try {
+            const res = await fetchWithRetry('/api/members', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('adminToken')}`
+                },
+                body: JSON.stringify(newMemberData)
+            });
+            if (res.ok) {
+                setShowAddModal(false);
+                setNewMemberData({
+                    name: '', email: '', role: 'MEMBER', position: '',
+                    fieldOfStudy: '', yearOfStudy: '', registrationNumber: '',
+                    contactInfo: '', password: ''
+                });
+                fetchMembers();
+            } else {
+                const data = await res.json();
+                alert(data.error || 'Failed to add member');
+            }
+        } catch (e) {
+            console.error(e);
+            alert('An error occurred');
+        } finally {
+            setIsSaving(false);
+        }
+    };
 
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this member?')) return;
@@ -57,7 +111,11 @@ export default function AdminMembers() {
                     <h1 style={{ fontSize: '2rem', marginBottom: '8px' }}>Members Directory</h1>
                     <p style={{ color: 'var(--color-text-muted)' }}>Manage club members and track their activity.</p>
                 </div>
-                <button className="btn btn-primary" style={{ padding: '10px 20px', borderRadius: '12px' }}>
+                <button
+                    className="btn btn-primary"
+                    style={{ padding: '10px 20px', borderRadius: '12px' }}
+                    onClick={() => setShowAddModal(true)}
+                >
                     <Plus size={18} style={{ marginRight: '8px' }} /> Add Member
                 </button>
             </div>
@@ -280,6 +338,178 @@ export default function AdminMembers() {
                                 <Trash2 size={15} /> Delete
                             </button>
                         </div>
+                    </div>
+                </>
+            )}
+
+            {/* Add Member Modal */}
+            {showAddModal && (
+                <>
+                    <div
+                        onClick={() => setShowAddModal(false)}
+                        style={{
+                            position: 'fixed',
+                            inset: 0,
+                            background: 'rgba(0,0,0,0.5)',
+                            backdropFilter: 'blur(4px)',
+                            zIndex: 200,
+                            animation: 'fadeIn 0.25s ease',
+                        }}
+                    />
+                    <div
+                        style={{
+                            position: 'fixed',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            width: '90%',
+                            maxWidth: '500px',
+                            background: 'linear-gradient(180deg, rgba(15,20,25,0.98) 0%, rgba(10,14,18,0.99) 100%)',
+                            border: '1px solid var(--color-border)',
+                            borderRadius: '16px',
+                            zIndex: 201,
+                            padding: '24px',
+                            boxShadow: '0 24px 48px rgba(0,0,0,0.5)',
+                            animation: 'fadeIn 0.25s ease',
+                            maxHeight: '90vh',
+                            overflowY: 'auto'
+                        }}
+                    >
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                            <h2 style={{ fontSize: '1.5rem', fontWeight: '600', color: '#fff' }}>Add New Member</h2>
+                            <button
+                                type="button"
+                                onClick={() => setShowAddModal(false)}
+                                style={{ background: 'none', border: 'none', color: '#aaa', cursor: 'pointer', padding: '4px' }}
+                            >
+                                <X size={20} />
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleAddSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.9rem', color: 'var(--color-text-muted)', marginBottom: '8px' }}>Full Name *</label>
+                                <input
+                                    type="text"
+                                    required
+                                    value={newMemberData.name}
+                                    onChange={handleNameChange}
+                                    style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--color-border)', color: '#fff' }}
+                                    placeholder="e.g. Jane Doe"
+                                />
+                            </div>
+
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.9rem', color: 'var(--color-text-muted)', marginBottom: '8px' }}>Email Address *</label>
+                                <input
+                                    type="email"
+                                    required
+                                    value={newMemberData.email}
+                                    onChange={(e) => setNewMemberData({ ...newMemberData, email: e.target.value })}
+                                    style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--color-border)', color: '#fff' }}
+                                    placeholder="jane@example.com"
+                                />
+                            </div>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.9rem', color: 'var(--color-text-muted)', marginBottom: '8px' }}>Default Password</label>
+                                    <input
+                                        type="text"
+                                        required
+                                        value={newMemberData.password}
+                                        onChange={(e) => setNewMemberData({ ...newMemberData, password: e.target.value })}
+                                        style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--color-border)', color: '#fff' }}
+                                    />
+                                    <div style={{ fontSize: '0.75rem', color: 'var(--color-primary-light)', marginTop: '4px' }}>
+                                        Defaults to first name.
+                                    </div>
+                                </div>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.9rem', color: 'var(--color-text-muted)', marginBottom: '8px' }}>Role</label>
+                                    <select
+                                        value={newMemberData.role}
+                                        onChange={(e) => setNewMemberData({ ...newMemberData, role: e.target.value })}
+                                        style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--color-border)', color: '#fff' }}
+                                    >
+                                        <option value="MEMBER">Member</option>
+                                        <option value="ADMIN">Admin</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.9rem', color: 'var(--color-text-muted)', marginBottom: '8px' }}>Position</label>
+                                <input
+                                    type="text"
+                                    value={newMemberData.position}
+                                    onChange={(e) => setNewMemberData({ ...newMemberData, position: e.target.value })}
+                                    style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--color-border)', color: '#fff' }}
+                                    placeholder="e.g. Event Coordinator"
+                                />
+                            </div>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.9rem', color: 'var(--color-text-muted)', marginBottom: '8px' }}>Field of Study</label>
+                                    <input
+                                        type="text"
+                                        value={newMemberData.fieldOfStudy}
+                                        onChange={(e) => setNewMemberData({ ...newMemberData, fieldOfStudy: e.target.value })}
+                                        style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--color-border)', color: '#fff' }}
+                                    />
+                                </div>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.9rem', color: 'var(--color-text-muted)', marginBottom: '8px' }}>Year of Study</label>
+                                    <input
+                                        type="text"
+                                        value={newMemberData.yearOfStudy}
+                                        onChange={(e) => setNewMemberData({ ...newMemberData, yearOfStudy: e.target.value })}
+                                        style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--color-border)', color: '#fff' }}
+                                    />
+                                </div>
+                            </div>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.9rem', color: 'var(--color-text-muted)', marginBottom: '8px' }}>Registration No.</label>
+                                    <input
+                                        type="text"
+                                        value={newMemberData.registrationNumber}
+                                        onChange={(e) => setNewMemberData({ ...newMemberData, registrationNumber: e.target.value })}
+                                        style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--color-border)', color: '#fff' }}
+                                    />
+                                </div>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.9rem', color: 'var(--color-text-muted)', marginBottom: '8px' }}>Contact Info (Phone)</label>
+                                    <input
+                                        type="text"
+                                        value={newMemberData.contactInfo}
+                                        onChange={(e) => setNewMemberData({ ...newMemberData, contactInfo: e.target.value })}
+                                        style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--color-border)', color: '#fff' }}
+                                    />
+                                </div>
+                            </div>
+
+                            <div style={{ marginTop: '16px', display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+                                <button
+                                    type="button"
+                                    onClick={() => setShowAddModal(false)}
+                                    className="btn btn-outline"
+                                    style={{ padding: '10px 20px', borderRadius: '8px' }}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary"
+                                    style={{ padding: '10px 20px', borderRadius: '8px' }}
+                                    disabled={isSaving}
+                                >
+                                    {isSaving ? 'Saving...' : 'Add Member'}
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </>
             )}
