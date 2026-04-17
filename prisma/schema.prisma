@@ -21,19 +21,20 @@ model Member {
   contactInfo     String?
   fieldOfStudy    String?
   yearOfStudy     String?
-  ideas           Idea[]
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  ideas             Idea[]   @relation("IdeaCreator")
+  collaboratedIdeas Idea[]   @relation("IdeaCollaborator")
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
 model Idea {
-  id          String   @id @default(uuid())
-  projectName String
-  description String
-  authors     String?
-  timeline    String?
-  memberId    String?
-  member      Member?  @relation(fields: [memberId], references: [id])
+  id            String   @id @default(uuid())
+  projectName   String
+  description   String
+  timeline      String?
+  memberId      String?
+  member        Member?  @relation("IdeaCreator", fields: [memberId], references: [id])
+  collaborators Member[] @relation("IdeaCollaborator")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

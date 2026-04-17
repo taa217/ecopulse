@@ -195,7 +195,12 @@ app.delete('/api/members/:id', authenticateToken, requireAdmin, async (req, res)
 // --- Ideas API ---
 app.get('/api/ideas', authenticateToken, async (req, res) => {
     try {
-        const ideas = await prisma.idea.findMany({ include: { member: { select: { name: true, email: true } } } });
+        const ideas = await prisma.idea.findMany({
+            include: {
+                member: { select: { name: true, email: true } },
+                collaborators: { select: { id: true, name: true } }
+            }
+        });
         res.json(ideas);
     } catch (error) {
         formatErrorResponse(res, error);
@@ -204,8 +209,16 @@ app.get('/api/ideas', authenticateToken, async (req, res) => {
 
 app.post('/api/ideas', authenticateToken, async (req, res) => {
     try {
+        const { collaboratorIds, ...ideaData } = req.body;
         const newIdea = await prisma.idea.create({
-            data: { ...req.body, memberId: req.user.id }
+            data: {
+                ...ideaData,
+                memberId: req.user.id,
+                ...(collaboratorIds && { collaborators: { connect: collaboratorIds.map(id => ({ id })) } })
+            },
+            include: {
+                collaborators: { select: { id: true, name: true } }
+            }
         });
         res.json(newIdea);
     } catch (error) {
@@ -219,9 +232,17 @@ app.put('/api/ideas/:id', authenticateToken, async (req, res) => {
         if (idea.memberId !== req.user.id && req.user.role !== 'ADMIN') {
             return res.status(403).json({ error: 'Unauthorized to edit this idea' });
         }
+
+        const { collaboratorIds, ...ideaData } = req.body;
         const updatedIdea = await prisma.idea.update({
             where: { id: req.params.id },
-            data: req.body
+            data: {
+                ...ideaData,
+                ...(collaboratorIds && { collaborators: { set: collaboratorIds.map(id => ({ id })) } })
+            },
+            include: {
+                collaborators: { select: { id: true, name: true } }
+            }
         });
         res.json(updatedIdea);
     } catch (error) {
