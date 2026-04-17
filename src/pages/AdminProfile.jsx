@@ -125,7 +125,7 @@ export default function AdminProfile() {
 
                 {/* Profile Header */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '24px', marginBottom: '40px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '32px' }}>
-                    <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'linear-gradient(135deg, var(--color-primary), var(--color-primary-light))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', fontWeight: 'bold', color: '#fff', boxShadow: '0 8px 32px rgba(76, 175, 80, 0.3)' }}>
+                    <div style={{ flexShrink: 0, width: '80px', height: '80px', borderRadius: '50%', background: 'linear-gradient(135deg, var(--color-primary), var(--color-primary-light))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', fontWeight: 'bold', color: '#fff', boxShadow: '0 8px 32px rgba(76, 175, 80, 0.3)' }}>
                         {profile.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
                     </div>
                     <div>
@@ -142,7 +142,7 @@ export default function AdminProfile() {
                         )}
                         <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                             <span style={{ display: 'inline-flex', padding: '4px 12px', background: profile.role === 'ADMIN' ? 'rgba(76, 175, 80, 0.2)' : 'rgba(255, 255, 255, 0.1)', color: profile.role === 'ADMIN' ? 'var(--color-primary-light)' : '#ccc', borderRadius: '20px', fontSize: '0.8rem', fontWeight: '600' }}>
-                                {profile.role}
+                                {profile.position || 'Standard Member'}
                             </span>
                         </div>
                     </div>
