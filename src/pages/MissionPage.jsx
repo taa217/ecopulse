@@ -54,7 +54,7 @@ function MissionPage() {
                         </div>
                         <div>
                             <div style={{ fontWeight: '600', fontSize: '1.1rem' }}>Loswita G. Kamuzangaza</div>
-                            <div style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>President & Founder, EcoPulse</div>
+                            <div style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>President, EcoPulse</div>
                         </div>
                     </div>
                 </motion.div>
