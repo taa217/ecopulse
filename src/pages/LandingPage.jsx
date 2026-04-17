@@ -238,10 +238,10 @@ function App() {
                 <h4 style={{ color: '#fff', marginBottom: '20px', fontSize: '1.1rem' }}>Contact</h4>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', color: 'var(--color-text-muted)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <Mail size={16} /> hello@ecopulse.org
+                    <Mail size={16} /> Contact the President: kloswita@gmail.com
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <MapPin size={16} /> Room 402, Student Center
+                    <MapPin size={16} /> University of Zimbabwe
                   </div>
                 </div>
               </div>
