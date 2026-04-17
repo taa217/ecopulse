@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Plus, Edit2, Trash2, Clock } from 'lucide-react';
+import { fetchWithRetry } from '../utils/fetchWithRetry';
 
 export default function AdminIdeas() {
     const [ideas, setIdeas] = useState([]);
@@ -7,7 +8,7 @@ export default function AdminIdeas() {
 
     const fetchIdeas = async () => {
         try {
-            const res = await fetch('/api/ideas', {
+            const res = await fetchWithRetry('/api/ideas', {
                 headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
             });
             const data = await res.json();

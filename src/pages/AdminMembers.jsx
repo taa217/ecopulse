@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Plus, Edit2, Trash2, X, Mail, Phone, BookOpen, Calendar, Hash, Shield, User, Briefcase } from 'lucide-react';
+import { fetchWithRetry } from '../utils/fetchWithRetry';
 
 export default function AdminMembers() {
     const [members, setMembers] = useState([]);
@@ -8,7 +9,7 @@ export default function AdminMembers() {
 
     const fetchMembers = async () => {
         try {
-            const res = await fetch('/api/members', {
+            const res = await fetchWithRetry('/api/members', {
                 headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
             });
             const data = await res.json();

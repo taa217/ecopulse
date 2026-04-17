@@ -32,6 +32,19 @@ const requireAdmin = (req, res, next) => {
     next();
 };
 
+const formatErrorResponse = (res, error) => {
+    console.error('API Error:', error);
+    const message = error.message || '';
+
+    if (message.includes("Can't reach database") || message.includes("prisma") || message.includes("database server") || message.includes("ECONNREFUSED")) {
+        return res.status(500).json({ error: "Can't reach server. Try again in a few moments." });
+    }
+    if (message.includes("Unique constraint failed")) {
+        return res.status(400).json({ error: "This record already exists." });
+    }
+    return res.status(500).json({ error: "An unexpected error occurred. Please try again later." });
+};
+
 // --- Auth Routes ---
 app.post('/api/auth/setup', async (req, res) => {
     try {
@@ -49,7 +62,7 @@ app.post('/api/auth/setup', async (req, res) => {
         });
         res.json({ message: 'Initial admin created!', email: admin.email, password: 'admin123' });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        formatErrorResponse(res, error);
     }
 });
 
@@ -65,7 +78,7 @@ app.post('/api/auth/login', async (req, res) => {
         const token = jwt.sign({ id: user.id, email: user.email, role: user.role, name: user.name }, JWT_SECRET, { expiresIn: '24h' });
         res.json({ token, user: { id: user.id, email: user.email, role: user.role, name: user.name } });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        formatErrorResponse(res, error);
     }
 });
 
@@ -96,7 +109,7 @@ app.put('/api/auth/change-password', authenticateToken, async (req, res) => {
 
         res.json({ message: 'Password changed successfully' });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        formatErrorResponse(res, error);
     }
 });
 
@@ -108,7 +121,7 @@ app.get('/api/members', authenticateToken, async (req, res) => {
         });
         res.json(members);
     } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch members' });
+        formatErrorResponse(res, error);
     }
 });
 
@@ -122,13 +135,36 @@ app.post('/api/members', authenticateToken, requireAdmin, async (req, res) => {
         const { password: _, ...memberWithoutPassword } = newMember;
         res.json(memberWithoutPassword);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        formatErrorResponse(res, error);
     }
 });
 
-app.put('/api/members/:id', authenticateToken, requireAdmin, async (req, res) => {
+app.get('/api/members/:id', authenticateToken, async (req, res) => {
     try {
+        const member = await prisma.member.findUnique({ where: { id: req.params.id } });
+        if (!member) return res.status(404).json({ error: 'Member not found' });
+        const { password: _, ...memberWithoutPassword } = member;
+        res.json(memberWithoutPassword);
+    } catch (error) {
+        formatErrorResponse(res, error);
+    }
+});
+
+app.put('/api/members/:id', authenticateToken, async (req, res) => {
+    try {
+        if (req.user.id !== req.params.id && req.user.role !== 'ADMIN') {
+            return res.status(403).json({ error: 'Unauthorized to edit this profile' });
+        }
+
         const updateData = { ...req.body };
+
+        // Prevent standard members from changing their role, email, or registrationNumber
+        if (req.user.role !== 'ADMIN') {
+            delete updateData.role;
+            delete updateData.email;
+            delete updateData.registrationNumber;
+        }
+
         if (updateData.password) {
             updateData.password = await bcrypt.hash(updateData.password, 10);
         }
@@ -139,7 +175,7 @@ app.put('/api/members/:id', authenticateToken, requireAdmin, async (req, res) =>
         const { password: _, ...memberWithoutPassword } = updatedMember;
         res.json(memberWithoutPassword);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        formatErrorResponse(res, error);
     }
 });
 
@@ -148,7 +184,7 @@ app.delete('/api/members/:id', authenticateToken, requireAdmin, async (req, res)
         await prisma.member.delete({ where: { id: req.params.id } });
         res.json({ success: true });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        formatErrorResponse(res, error);
     }
 });
 
@@ -158,7 +194,7 @@ app.get('/api/ideas', authenticateToken, async (req, res) => {
         const ideas = await prisma.idea.findMany({ include: { member: { select: { name: true, email: true } } } });
         res.json(ideas);
     } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch ideas' });
+        formatErrorResponse(res, error);
     }
 });
 
@@ -169,7 +205,7 @@ app.post('/api/ideas', authenticateToken, async (req, res) => {
         });
         res.json(newIdea);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        formatErrorResponse(res, error);
     }
 });
 
@@ -185,7 +221,7 @@ app.put('/api/ideas/:id', authenticateToken, async (req, res) => {
         });
         res.json(updatedIdea);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        formatErrorResponse(res, error);
     }
 });
 
@@ -194,7 +230,7 @@ app.delete('/api/ideas/:id', authenticateToken, requireAdmin, async (req, res) =
         await prisma.idea.delete({ where: { id: req.params.id } });
         res.json({ success: true });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        formatErrorResponse(res, error);
     }
 });
 

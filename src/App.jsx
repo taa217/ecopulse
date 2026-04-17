@@ -4,6 +4,7 @@ import LandingPage from './pages/LandingPage';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminAuth from './pages/AdminAuth';
 import MissionPage from './pages/MissionPage';
+import AdminProfile from './pages/AdminProfile';
 
 // A simple auth guard component
 const PrivateRoute = ({ children }) => {

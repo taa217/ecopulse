@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
-import { Users, Lightbulb, Lock, LogOut, Menu, X } from 'lucide-react';
+import { Users, Lightbulb, Lock, LogOut, Menu, X, User } from 'lucide-react';
 import AdminMembers from './AdminMembers';
 import AdminIdeas from './AdminIdeas';
 import AdminChangePassword from './AdminChangePassword';
+import AdminProfile from './AdminProfile';
 import logoSvg from '../assets/logo.svg';
 
 export default function AdminDashboard() {
@@ -54,6 +55,14 @@ export default function AdminDashboard() {
                     }}>
                         <Lightbulb size={20} /> Projects & Ideas
                     </Link>
+                    <Link to="/admin/profile" onClick={closeSidebar} style={{
+                        display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', borderRadius: '12px',
+                        color: isActive('profile') ? 'var(--color-primary-light)' : 'var(--color-text-muted)',
+                        background: isActive('profile') ? 'rgba(76, 175, 80, 0.1)' : 'transparent',
+                        textDecoration: 'none', transition: 'all 0.2s', fontWeight: '500'
+                    }}>
+                        <User size={20} /> My Profile
+                    </Link>
                     <Link to="/admin/change-password" onClick={closeSidebar} style={{
                         display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', borderRadius: '12px',
                         color: isActive('change-password') ? 'var(--color-primary-light)' : 'var(--color-text-muted)',
@@ -83,6 +92,7 @@ export default function AdminDashboard() {
                     } />
                     <Route path="/members" element={<AdminMembers />} />
                     <Route path="/ideas" element={<AdminIdeas />} />
+                    <Route path="/profile" element={<AdminProfile />} />
                     <Route path="/change-password" element={<AdminChangePassword />} />
                 </Routes>
             </main>
