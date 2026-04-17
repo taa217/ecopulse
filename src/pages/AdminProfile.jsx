@@ -101,14 +101,14 @@ export default function AdminProfile() {
 
     return (
         <div style={{ maxWidth: '800px', margin: '0 auto', animate: 'fadeIn 0.3s ease-out' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
                 <h1 style={{ fontSize: '2rem', margin: 0 }}>My Profile</h1>
                 {!isEditing ? (
                     <button onClick={() => setIsEditing(true)} className="btn btn-outline" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                         <Edit2 size={18} /> Edit Profile
                     </button>
                 ) : (
-                    <div style={{ display: 'flex', gap: '12px' }}>
+                    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                         <button onClick={() => { setIsEditing(false); setEditForm(profile); }} className="btn btn-outline" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                             <X size={18} /> Cancel
                         </button>
