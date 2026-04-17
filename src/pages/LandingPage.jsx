@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Leaf, Globe, Users, ArrowRight, ChevronDown, Mail, MapPin } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import logoSvg from '../assets/logo.svg';
 
 function App() {
@@ -22,7 +23,7 @@ function App() {
             <span>EcoPulse</span>
           </div>
           <div className="nav-links" style={{ display: 'flex', gap: '28px', alignItems: 'center', fontWeight: '500' }}>
-            <a href="#mission" style={{ transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color = 'var(--color-primary-light)'} onMouseOut={e => e.target.style.color = 'inherit'}>Mission</a>
+            <a href="/mission" style={{ transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color = 'var(--color-primary-light)'} onMouseOut={e => e.target.style.color = 'inherit'}>Mission</a>
             <a href="#join" className="btn btn-primary" style={{ padding: '8px 20px', fontSize: '0.9rem' }}>Join Us</a>
           </div>
         </div>
@@ -51,7 +52,7 @@ function App() {
               <a href="#join" className="btn btn-primary">
                 Become a Member <ArrowRight size={18} />
               </a>
-              <a href="#mission" className="btn btn-outline">
+              <a href="/mission" className="btn btn-outline">
                 Learn More
               </a>
             </div>
@@ -79,6 +80,11 @@ function App() {
           >
             <h2 style={{ fontSize: '3rem', marginBottom: '16px', letterSpacing: '-0.02em' }}>Our Mission</h2>
             <p style={{ color: 'var(--color-text-muted)', maxWidth: '650px', margin: '0 auto', fontSize: '1.2rem', lineHeight: '1.6' }}>To empower students to take meaningful climate action starting from our local community, building a foundation for sustainable living.</p>
+            <div style={{ marginTop: '32px' }}>
+              <Link to="/mission" className="btn btn-outline" style={{ display: 'inline-flex', padding: '12px 28px', fontSize: '1.05rem' }}>
+                Read the President's Blog <ArrowRight size={18} style={{ marginLeft: '8px' }} />
+              </Link>
+            </div>
           </motion.div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '30px' }}>
@@ -230,7 +236,7 @@ function App() {
                 <h4 style={{ color: '#fff', marginBottom: '20px', fontSize: '1.1rem' }}>Navigation</h4>
                 <ul style={{ listStyle: 'none', color: 'var(--color-text-muted)', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   <li><a href="#" style={{ transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color = '#fff'} onMouseOut={e => e.target.style.color = 'var(--color-text-muted)'}>Home</a></li>
-                  <li><a href="#mission" style={{ transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color = '#fff'} onMouseOut={e => e.target.style.color = 'var(--color-text-muted)'}>Our Mission</a></li>
+                  <li><a href="/mission" style={{ transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color = '#fff'} onMouseOut={e => e.target.style.color = 'var(--color-text-muted)'}>Our Mission</a></li>
                   <li><a href="#join" style={{ transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color = '#fff'} onMouseOut={e => e.target.style.color = 'var(--color-text-muted)'}>Join the Club</a></li>
                 </ul>
               </div>

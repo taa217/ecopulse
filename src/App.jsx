@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import LandingPage from './pages/LandingPage';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminAuth from './pages/AdminAuth';
+import MissionPage from './pages/MissionPage';
 
 // A simple auth guard component
 const PrivateRoute = ({ children }) => {
@@ -19,6 +20,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/mission" element={<MissionPage />} />
         <Route path="/admin/login" element={<AdminAuth />} />
         <Route path="/admin/*" element={
           <PrivateRoute>
