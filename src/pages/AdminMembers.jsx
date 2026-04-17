@@ -64,7 +64,7 @@ export default function AdminMembers() {
                                 </td>
                                 <td style={{ padding: '16px 24px' }}>
                                     <div>{m.email}</div>
-                                    <span style={{ display: 'inline-block', padding: '2px 8px', borderRadius: '20px', fontSize: '0.75rem', background: m.role === 'ADMIN' ? 'rgba(18, 183, 106, 0.2)' : 'rgba(255,255,255,0.1)', color: m.role === 'ADMIN' ? 'var(--color-primary-light)' : '#aaa', marginTop: '4px' }}>{m.role}</span>
+                                    <span style={{ display: 'inline-block', padding: '2px 8px', borderRadius: '20px', fontSize: '0.75rem', background: m.role === 'ADMIN' ? 'rgba(76, 175, 80, 0.2)' : 'rgba(255,255,255,0.1)', color: m.role === 'ADMIN' ? 'var(--color-primary-light)' : '#aaa', marginTop: '4px' }}>{m.role}</span>
                                 </td>
                                 <td style={{ padding: '16px 24px', color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
                                     {m.fieldOfStudy || '-'} <br /> {m.yearOfStudy ? `Year ${m.yearOfStudy}` : ''}

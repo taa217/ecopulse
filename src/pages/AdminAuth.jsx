@@ -54,10 +54,10 @@ export default function AdminAuth() {
     return (
         <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--color-bg)', padding: '20px' }}>
             <div className="glass" style={{ width: '100%', maxWidth: '450px', padding: '40px', borderRadius: '24px', position: 'relative', overflow: 'hidden' }}>
-                <div style={{ position: 'absolute', top: '-50%', left: '-50%', width: '200%', height: '200%', background: 'radial-gradient(circle at 50% 0%, rgba(18, 183, 106, 0.15) 0%, transparent 50%)', pointerEvents: 'none' }}></div>
+                <div style={{ position: 'absolute', top: '-50%', left: '-50%', width: '200%', height: '200%', background: 'radial-gradient(circle at 50% 0%, rgba(76, 175, 80, 0.15) 0%, transparent 50%)', pointerEvents: 'none' }}></div>
 
                 <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', marginBottom: '32px' }}>
-                    <div style={{ background: 'rgba(18, 183, 106, 0.15)', width: '64px', height: '64px', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', color: 'var(--color-primary)' }}>
+                    <div style={{ background: 'rgba(76, 175, 80, 0.15)', width: '64px', height: '64px', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', color: 'var(--color-primary)' }}>
                         <Lock size={30} />
                     </div>
                     <h1 style={{ fontSize: '2rem', marginBottom: '8px' }}>Admin Login</h1>

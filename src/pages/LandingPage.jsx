@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Leaf, Globe, Users, ArrowRight, ChevronDown, Mail, MapPin } from 'lucide-react';
+import logoSvg from '../assets/logo.svg';
 
 function App() {
   const [scrolled, setScrolled] = useState(false);
@@ -17,7 +18,7 @@ function App() {
       <nav className={`glass ${scrolled ? 'scrolled' : ''}`} style={{ margin: scrolled ? '10px 24px' : '0', padding: scrolled ? '15px 24px' : '20px 48px', borderRadius: scrolled ? '20px' : '0', background: scrolled ? 'var(--color-surface)' : 'transparent', border: scrolled ? '1px solid var(--color-border)' : 'none', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }}>
         <div className="nav-content container">
           <div className="logo text-primary">
-            <Leaf size={28} />
+            <img src={logoSvg} alt="EcoPulse" style={{ width: '36px', height: '36px' }} />
             <span>EcoPulse</span>
           </div>
           <div className="nav-links" style={{ display: 'flex', gap: '28px', alignItems: 'center', fontWeight: '500' }}>
@@ -36,12 +37,12 @@ function App() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             style={{ maxWidth: '800px' }}
           >
-            <div style={{ display: 'inline-block', padding: '8px 16px', borderRadius: '30px', background: 'rgba(18, 183, 106, 0.1)', border: '1px solid var(--color-border)', marginBottom: '24px', color: 'var(--color-primary-light)', fontWeight: '500', fontSize: '0.9rem' }}>
+            <div style={{ display: 'inline-block', padding: '8px 16px', borderRadius: '30px', background: 'rgba(76, 175, 80, 0.1)', border: '1px solid var(--color-border)', marginBottom: '24px', color: 'var(--color-primary-light)', fontWeight: '500', fontSize: '0.9rem' }}>
               <Globe size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '8px', marginBottom: '2px' }} />
               Join the movement for a sustainable future
             </div>
             <h1 style={{ fontSize: 'clamp(3rem, 5vw + 1rem, 5.5rem)', marginBottom: '20px', letterSpacing: '-0.03em' }}>
-              We are the pulse of <span className="text-primary" style={{ textShadow: '0 0 40px rgba(18, 183, 106, 0.4)' }}>Change</span>.
+              We are the pulse of <span className="text-primary" style={{ textShadow: '0 0 40px rgba(76, 175, 80, 0.4)' }}>Change</span>.
             </h1>
             <p style={{ fontSize: '1.25rem', color: 'var(--color-text-muted)', marginBottom: '40px', maxWidth: '600px', lineHeight: '1.7' }}>
               EcoPulse is a student-led climate action club dedicated to fostering sustainable habits, driving local environmental initiatives, and raising awareness.
@@ -82,14 +83,14 @@ function App() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '30px' }}>
             <motion.div
-              whileHover={{ y: -10, boxShadow: '0 20px 40px rgba(0,0,0,0.4)', borderColor: 'rgba(18, 183, 106, 0.4)' }}
+              whileHover={{ y: -10, boxShadow: '0 20px 40px rgba(0,0,0,0.4)', borderColor: 'rgba(33, 150, 243, 0.4)' }}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1, duration: 0.5 }}
               className="glass" style={{ padding: '48px 40px', transition: 'all 0.3s ease' }}
             >
-              <div style={{ background: 'rgba(18, 183, 106, 0.15)', width: '64px', height: '64px', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '28px', color: 'var(--color-primary-light)', border: '1px solid rgba(18, 183, 106, 0.2)' }}>
+              <div style={{ background: 'rgba(33, 150, 243, 0.15)', width: '64px', height: '64px', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '28px', color: '#64B5F6', border: '1px solid rgba(33, 150, 243, 0.2)' }}>
                 <Globe size={28} />
               </div>
               <h3 style={{ fontSize: '1.6rem', marginBottom: '16px' }}>Global Awareness</h3>
@@ -97,14 +98,14 @@ function App() {
             </motion.div>
 
             <motion.div
-              whileHover={{ y: -10, boxShadow: '0 20px 40px rgba(0,0,0,0.4)', borderColor: 'rgba(18, 183, 106, 0.4)' }}
+              whileHover={{ y: -10, boxShadow: '0 20px 40px rgba(0,0,0,0.4)', borderColor: 'rgba(76, 175, 80, 0.4)' }}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2, duration: 0.5 }}
               className="glass" style={{ padding: '48px 40px', transition: 'all 0.3s ease' }}
             >
-              <div style={{ background: 'rgba(18, 183, 106, 0.15)', width: '64px', height: '64px', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '28px', color: 'var(--color-primary-light)', border: '1px solid rgba(18, 183, 106, 0.2)' }}>
+              <div style={{ background: 'rgba(76, 175, 80, 0.15)', width: '64px', height: '64px', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '28px', color: 'var(--color-primary-light)', border: '1px solid rgba(76, 175, 80, 0.2)' }}>
                 <Leaf size={28} />
               </div>
               <h3 style={{ fontSize: '1.6rem', marginBottom: '16px' }}>Local Action</h3>
@@ -112,14 +113,14 @@ function App() {
             </motion.div>
 
             <motion.div
-              whileHover={{ y: -10, boxShadow: '0 20px 40px rgba(0,0,0,0.4)', borderColor: 'rgba(18, 183, 106, 0.4)' }}
+              whileHover={{ y: -10, boxShadow: '0 20px 40px rgba(0,0,0,0.4)', borderColor: 'rgba(255, 152, 0, 0.4)' }}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3, duration: 0.5 }}
               className="glass" style={{ padding: '48px 40px', transition: 'all 0.3s ease' }}
             >
-              <div style={{ background: 'rgba(18, 183, 106, 0.15)', width: '64px', height: '64px', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '28px', color: 'var(--color-primary-light)', border: '1px solid rgba(18, 183, 106, 0.2)' }}>
+              <div style={{ background: 'rgba(255, 152, 0, 0.15)', width: '64px', height: '64px', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '28px', color: '#FFB74D', border: '1px solid rgba(255, 152, 0, 0.2)' }}>
                 <Users size={28} />
               </div>
               <h3 style={{ fontSize: '1.6rem', marginBottom: '16px' }}>Community Building</h3>
@@ -144,7 +145,7 @@ function App() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '30px' }}>
             <motion.div
-              whileHover={{ y: -10, boxShadow: '0 20px 40px rgba(0,0,0,0.4)', borderColor: 'rgba(18, 183, 106, 0.4)' }}
+              whileHover={{ y: -10, boxShadow: '0 20px 40px rgba(0,0,0,0.4)', borderColor: 'rgba(76, 175, 80, 0.4)' }}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -152,7 +153,7 @@ function App() {
               className="glass"
               style={{ overflow: 'hidden', padding: '0', display: 'flex', flexDirection: 'column', transition: 'all 0.3s ease' }}
             >
-              <div style={{ height: '220px', background: 'linear-gradient(135deg, #0c8c51, rgba(18, 183, 106, 0.4))', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ height: '220px', background: 'linear-gradient(135deg, #2E7D32, rgba(76, 175, 80, 0.4))', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Leaf size={64} color="rgba(255,255,255,0.9)" style={{ filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.2))' }} />
               </div>
               <div style={{ padding: '40px', flex: 1 }}>
@@ -164,7 +165,7 @@ function App() {
             </motion.div>
 
             <motion.div
-              whileHover={{ y: -10, boxShadow: '0 20px 40px rgba(0,0,0,0.4)', borderColor: 'rgba(18, 183, 106, 0.4)' }}
+              whileHover={{ y: -10, boxShadow: '0 20px 40px rgba(0,0,0,0.4)', borderColor: 'rgba(33, 150, 243, 0.4)' }}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -172,7 +173,7 @@ function App() {
               className="glass"
               style={{ overflow: 'hidden', padding: '0', display: 'flex', flexDirection: 'column', transition: 'all 0.3s ease' }}
             >
-              <div style={{ height: '220px', background: 'linear-gradient(135deg, rgba(18, 183, 106, 0.4), #0c8c51)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ height: '220px', background: 'linear-gradient(135deg, rgba(33, 150, 243, 0.4), #1565C0)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Globe size={64} color="rgba(255,255,255,0.9)" style={{ filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.2))' }} />
               </div>
               <div style={{ padding: '40px', flex: 1 }}>
@@ -195,9 +196,9 @@ function App() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
             className="glass"
-            style={{ padding: '70px 40px', textAlign: 'center', position: 'relative', overflow: 'hidden', border: '1px solid rgba(18, 183, 106, 0.3)', boxShadow: '0 20px 60px rgba(0,0,0,0.5)' }}
+            style={{ padding: '70px 40px', textAlign: 'center', position: 'relative', overflow: 'hidden', border: '1px solid rgba(76, 175, 80, 0.3)', boxShadow: '0 20px 60px rgba(0,0,0,0.5)' }}
           >
-            <div style={{ position: 'absolute', top: '-50%', left: '-50%', width: '200%', height: '200%', background: 'radial-gradient(circle at 50% 50%, rgba(18, 183, 106, 0.08) 0%, transparent 50%)', zIndex: 0, pointerEvents: 'none' }}></div>
+            <div style={{ position: 'absolute', top: '-50%', left: '-50%', width: '200%', height: '200%', background: 'radial-gradient(circle at 50% 50%, rgba(76, 175, 80, 0.08) 0%, transparent 50%)', zIndex: 0, pointerEvents: 'none' }}></div>
 
             <div style={{ position: 'relative', zIndex: 1 }}>
               <h2 style={{ fontSize: '3.2rem', marginBottom: '20px', letterSpacing: '-0.02em' }}>Ready to make an impact?</h2>
@@ -218,7 +219,7 @@ function App() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '50px', flexWrap: 'wrap', gap: '40px' }}>
             <div>
               <div className="logo text-primary" style={{ marginBottom: '16px' }}>
-                <Leaf size={24} />
+                <img src={logoSvg} alt="EcoPulse" style={{ width: '32px', height: '32px' }} />
                 <span>EcoPulse</span>
               </div>
               <p style={{ color: 'var(--color-text-muted)', maxWidth: '300px' }}>Empowering students to drive local climate action for a sustainable global future.</p>

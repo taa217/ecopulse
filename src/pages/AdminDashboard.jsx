@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
-import { Users, Lightbulb, LogOut, Leaf, Menu, X } from 'lucide-react';
+import { Users, Lightbulb, LogOut, Menu, X } from 'lucide-react';
 import AdminMembers from './AdminMembers';
 import AdminIdeas from './AdminIdeas';
+import logoSvg from '../assets/logo.svg';
 
 export default function AdminDashboard() {
     const navigate = useNavigate();
@@ -27,16 +28,19 @@ export default function AdminDashboard() {
 
             {/* Sidebar */}
             <aside className={`admin-sidebar ${isSidebarOpen ? 'open' : ''}`}>
-                <div style={{ marginBottom: '40px', paddingLeft: '10px' }}>
-                    <h2 style={{ fontSize: '1.5rem', color: '#fff', letterSpacing: '-0.02em', margin: 0 }}>EcoPulse</h2>
-                    <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', margin: '4px 0 0 0' }}>Admin Panel</p>
+                <div style={{ marginBottom: '40px', paddingLeft: '10px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <img src={logoSvg} alt="EcoPulse" style={{ width: '40px', height: '40px' }} />
+                    <div>
+                        <h2 style={{ fontSize: '1.5rem', color: '#fff', letterSpacing: '-0.02em', margin: 0 }}>EcoPulse</h2>
+                        <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', margin: '4px 0 0 0' }}>Admin Panel</p>
+                    </div>
                 </div>
 
                 <nav style={{ position: 'relative', padding: 0, flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <Link to="/admin/members" onClick={closeSidebar} style={{
                         display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', borderRadius: '12px',
                         color: isActive('members') ? 'var(--color-primary-light)' : 'var(--color-text-muted)',
-                        background: isActive('members') ? 'rgba(18, 183, 106, 0.1)' : 'transparent',
+                        background: isActive('members') ? 'rgba(76, 175, 80, 0.1)' : 'transparent',
                         textDecoration: 'none', transition: 'all 0.2s', fontWeight: '500'
                     }}>
                         <Users size={20} /> Members Directory
@@ -44,7 +48,7 @@ export default function AdminDashboard() {
                     <Link to="/admin/ideas" onClick={closeSidebar} style={{
                         display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', borderRadius: '12px',
                         color: isActive('ideas') ? 'var(--color-primary-light)' : 'var(--color-text-muted)',
-                        background: isActive('ideas') ? 'rgba(18, 183, 106, 0.1)' : 'transparent',
+                        background: isActive('ideas') ? 'rgba(76, 175, 80, 0.1)' : 'transparent',
                         textDecoration: 'none', transition: 'all 0.2s', fontWeight: '500'
                     }}>
                         <Lightbulb size={20} /> Projects & Ideas
@@ -61,8 +65,8 @@ export default function AdminDashboard() {
                 <Routes>
                     <Route path="/" element={
                         <div className="glass welcome-glass" style={{ padding: '60px', textAlign: 'center', borderRadius: '24px' }}>
-                            <div style={{ background: 'rgba(18, 183, 106, 0.15)', width: '80px', height: '80px', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', color: 'var(--color-primary)' }}>
-                                <Leaf size={40} />
+                            <div style={{ width: '80px', height: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+                                <img src={logoSvg} alt="EcoPulse" style={{ width: '80px', height: '80px' }} />
                             </div>
                             <h2 style={{ fontSize: '2rem', marginBottom: '16px' }}>Welcome to the Admin Dashboard</h2>
                             <p style={{ color: 'var(--color-text-muted)', fontSize: '1.1rem', maxWidth: '500px', margin: '0 auto' }}>Select a section from the sidebar to manage members and ideas/projects.</p>
