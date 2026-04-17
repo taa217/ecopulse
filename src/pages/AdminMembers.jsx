@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Edit2, Trash2 } from 'lucide-react';
+import { Plus, Edit2, Trash2, X, Mail, Phone, BookOpen, Calendar, Hash, Shield, User, Briefcase } from 'lucide-react';
 
 export default function AdminMembers() {
     const [members, setMembers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [selectedMember, setSelectedMember] = useState(null);
 
     const fetchMembers = async () => {
         try {
@@ -25,8 +26,27 @@ export default function AdminMembers() {
                 method: 'DELETE',
                 headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
             });
+            setSelectedMember(null);
             fetchMembers();
         } catch (e) { console.error(e); }
+    };
+
+    const getInitials = (name) => {
+        if (!name) return '?';
+        return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    };
+
+    const getRoleColor = (role) => {
+        return role === 'ADMIN'
+            ? { bg: 'rgba(76, 175, 80, 0.15)', color: '#66BB6A', border: 'rgba(76, 175, 80, 0.3)' }
+            : { bg: 'rgba(255,255,255,0.06)', color: '#8b949e', border: 'rgba(255,255,255,0.1)' };
+    };
+
+    const formatDate = (dateStr) => {
+        if (!dateStr) return '-';
+        return new Date(dateStr).toLocaleDateString('en-US', {
+            year: 'numeric', month: 'long', day: 'numeric'
+        });
     };
 
     return (
@@ -57,7 +77,18 @@ export default function AdminMembers() {
                         ) : members.length === 0 ? (
                             <tr><td colSpan="4" style={{ padding: '40px', textAlign: 'center', color: 'var(--color-text-muted)' }}>No members found.</td></tr>
                         ) : members.map((m) => (
-                            <tr key={m.id} style={{ borderTop: '1px solid var(--color-border)' }}>
+                            <tr
+                                key={m.id}
+                                onClick={() => setSelectedMember(m)}
+                                style={{
+                                    borderTop: '1px solid var(--color-border)',
+                                    cursor: 'pointer',
+                                    transition: 'background 0.2s ease',
+                                    background: selectedMember?.id === m.id ? 'rgba(76, 175, 80, 0.08)' : 'transparent',
+                                }}
+                                onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.03)'}
+                                onMouseLeave={e => e.currentTarget.style.background = selectedMember?.id === m.id ? 'rgba(76, 175, 80, 0.08)' : 'transparent'}
+                            >
                                 <td style={{ padding: '16px 24px' }}>
                                     <div style={{ fontWeight: '500', color: '#fff' }}>{m.name}</div>
                                     <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginTop: '4px' }}>{m.position || 'Member'}</div>
@@ -70,13 +101,255 @@ export default function AdminMembers() {
                                     {m.fieldOfStudy || '-'} <br /> {m.yearOfStudy ? `Year ${m.yearOfStudy}` : ''}
                                 </td>
                                 <td style={{ padding: '16px 24px', textAlign: 'right' }}>
-                                    <button style={{ background: 'none', border: 'none', color: 'var(--color-text-muted)', cursor: 'pointer', padding: '6px' }}><Edit2 size={16} /></button>
-                                    <button onClick={() => handleDelete(m.id)} style={{ background: 'none', border: 'none', color: '#ff6b6b', cursor: 'pointer', padding: '6px', marginLeft: '8px' }}><Trash2 size={16} /></button>
+                                    <button onClick={(e) => { e.stopPropagation(); }} style={{ background: 'none', border: 'none', color: 'var(--color-text-muted)', cursor: 'pointer', padding: '6px' }}><Edit2 size={16} /></button>
+                                    <button onClick={(e) => { e.stopPropagation(); handleDelete(m.id); }} style={{ background: 'none', border: 'none', color: '#ff6b6b', cursor: 'pointer', padding: '6px', marginLeft: '8px' }}><Trash2 size={16} /></button>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
+            </div>
+
+            {/* Member Detail Overlay */}
+            {selectedMember && (
+                <>
+                    {/* Backdrop */}
+                    <div
+                        onClick={() => setSelectedMember(null)}
+                        style={{
+                            position: 'fixed',
+                            inset: 0,
+                            background: 'rgba(0,0,0,0.5)',
+                            backdropFilter: 'blur(4px)',
+                            zIndex: 200,
+                            animation: 'fadeIn 0.25s ease',
+                        }}
+                    />
+
+                    {/* Detail Panel */}
+                    <div
+                        style={{
+                            position: 'fixed',
+                            top: 0,
+                            right: 0,
+                            bottom: 0,
+                            width: '100%',
+                            maxWidth: '480px',
+                            background: 'linear-gradient(180deg, rgba(15,20,25,0.98) 0%, rgba(10,14,18,0.99) 100%)',
+                            borderLeft: '1px solid var(--color-border)',
+                            zIndex: 201,
+                            overflowY: 'auto',
+                            animation: 'slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                            display: 'flex',
+                            flexDirection: 'column',
+                        }}
+                    >
+                        {/* Header / Profile Section */}
+                        <div style={{
+                            background: 'linear-gradient(135deg, rgba(76,175,80,0.12) 0%, rgba(33,150,243,0.08) 100%)',
+                            padding: '32px 28px 28px',
+                            borderBottom: '1px solid var(--color-border)',
+                            position: 'relative',
+                        }}>
+                            <button
+                                onClick={() => setSelectedMember(null)}
+                                style={{
+                                    position: 'absolute',
+                                    top: '16px',
+                                    right: '16px',
+                                    background: 'rgba(255,255,255,0.08)',
+                                    border: '1px solid rgba(255,255,255,0.1)',
+                                    borderRadius: '10px',
+                                    color: '#aaa',
+                                    cursor: 'pointer',
+                                    padding: '6px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    transition: 'all 0.2s',
+                                }}
+                                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.15)'; e.currentTarget.style.color = '#fff'; }}
+                                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#aaa'; }}
+                            >
+                                <X size={18} />
+                            </button>
+
+                            {/* Avatar */}
+                            <div style={{
+                                width: '72px',
+                                height: '72px',
+                                borderRadius: '20px',
+                                background: 'linear-gradient(135deg, var(--color-primary), #2E7D32)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '1.5rem',
+                                fontWeight: '700',
+                                color: '#fff',
+                                marginBottom: '16px',
+                                boxShadow: '0 8px 24px rgba(76, 175, 80, 0.25)',
+                            }}>
+                                {getInitials(selectedMember.name)}
+                            </div>
+
+                            <h2 style={{ fontSize: '1.5rem', fontWeight: '600', color: '#fff', marginBottom: '4px' }}>
+                                {selectedMember.name}
+                            </h2>
+                            <p style={{ color: 'var(--color-primary-light)', fontWeight: '500', fontSize: '0.95rem', marginBottom: '12px' }}>
+                                {selectedMember.position || 'Member'}
+                            </p>
+
+                            {/* Role Badge */}
+                            {(() => {
+                                const rc = getRoleColor(selectedMember.role);
+                                return (
+                                    <span style={{
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: '6px',
+                                        padding: '5px 14px',
+                                        borderRadius: '20px',
+                                        fontSize: '0.8rem',
+                                        fontWeight: '500',
+                                        background: rc.bg,
+                                        color: rc.color,
+                                        border: `1px solid ${rc.border}`,
+                                    }}>
+                                        <Shield size={13} />
+                                        {selectedMember.role}
+                                    </span>
+                                );
+                            })()}
+                        </div>
+
+                        {/* Detail Fields */}
+                        <div style={{ padding: '24px 28px', flex: 1 }}>
+                            <DetailSection title="Contact Information">
+                                <DetailRow icon={<Mail size={16} />} label="Email" value={selectedMember.email} />
+                                <DetailRow icon={<Phone size={16} />} label="Phone" value={selectedMember.contactInfo || '-'} />
+                            </DetailSection>
+
+                            <DetailSection title="Academic Details">
+                                <DetailRow icon={<BookOpen size={16} />} label="Field of Study" value={selectedMember.fieldOfStudy || '-'} />
+                                <DetailRow icon={<Hash size={16} />} label="Year of Study" value={selectedMember.yearOfStudy ? `Year ${selectedMember.yearOfStudy}` : '-'} />
+                                <DetailRow icon={<Hash size={16} />} label="Registration No." value={selectedMember.registrationNumber || '-'} />
+                            </DetailSection>
+
+                            <DetailSection title="Membership">
+                                <DetailRow icon={<Briefcase size={16} />} label="Position" value={selectedMember.position || 'Member'} />
+                                <DetailRow icon={<Calendar size={16} />} label="Birthday" value={selectedMember.birthdays || '-'} />
+                                <DetailRow icon={<Calendar size={16} />} label="Joined" value={formatDate(selectedMember.createdAt)} />
+                            </DetailSection>
+
+                            {selectedMember.activityHistory && (
+                                <DetailSection title="Activity History">
+                                    <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', lineHeight: '1.7' }}>
+                                        {selectedMember.activityHistory}
+                                    </p>
+                                </DetailSection>
+                            )}
+                        </div>
+
+                        {/* Footer Actions */}
+                        <div style={{
+                            padding: '20px 28px',
+                            borderTop: '1px solid var(--color-border)',
+                            display: 'flex',
+                            gap: '12px',
+                        }}>
+                            <button
+                                className="btn btn-outline"
+                                style={{ flex: 1, borderRadius: '12px', padding: '10px', fontSize: '0.9rem' }}
+                            >
+                                <Edit2 size={15} /> Edit
+                            </button>
+                            <button
+                                onClick={() => handleDelete(selectedMember.id)}
+                                className="btn"
+                                style={{
+                                    flex: 1,
+                                    borderRadius: '12px',
+                                    padding: '10px',
+                                    fontSize: '0.9rem',
+                                    background: 'rgba(255,107,107,0.12)',
+                                    color: '#ff6b6b',
+                                    border: '1px solid rgba(255,107,107,0.2)',
+                                }}
+                            >
+                                <Trash2 size={15} /> Delete
+                            </button>
+                        </div>
+                    </div>
+                </>
+            )}
+
+            {/* Animations */}
+            <style>{`
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                @keyframes slideInRight {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+            `}</style>
+        </div>
+    );
+}
+
+/* --- Helper Sub-Components --- */
+
+function DetailSection({ title, children }) {
+    return (
+        <div style={{ marginBottom: '24px' }}>
+            <h4 style={{
+                fontSize: '0.75rem',
+                fontWeight: '600',
+                textTransform: 'uppercase',
+                letterSpacing: '1px',
+                color: 'var(--color-text-muted)',
+                marginBottom: '14px',
+                paddingBottom: '8px',
+                borderBottom: '1px solid rgba(255,255,255,0.05)',
+            }}>
+                {title}
+            </h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {children}
+            </div>
+        </div>
+    );
+}
+
+function DetailRow({ icon, label, value }) {
+    return (
+        <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            padding: '10px 14px',
+            borderRadius: '12px',
+            background: 'rgba(255,255,255,0.03)',
+            border: '1px solid rgba(255,255,255,0.04)',
+            transition: 'background 0.2s',
+        }}>
+            <div style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '8px',
+                background: 'rgba(76, 175, 80, 0.1)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'var(--color-primary-light)',
+                flexShrink: 0,
+            }}>
+                {icon}
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '2px' }}>{label}</div>
+                <div style={{ fontSize: '0.9rem', color: '#e6edf3', wordBreak: 'break-word' }}>{value}</div>
             </div>
         </div>
     );
