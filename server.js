@@ -181,6 +181,10 @@ app.put('/api/members/:id', authenticateToken, async (req, res) => {
 
 app.delete('/api/members/:id', authenticateToken, requireAdmin, async (req, res) => {
     try {
+        await prisma.idea.updateMany({
+            where: { memberId: req.params.id },
+            data: { memberId: null }
+        });
         await prisma.member.delete({ where: { id: req.params.id } });
         res.json({ success: true });
     } catch (error) {

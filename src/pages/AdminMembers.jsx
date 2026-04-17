@@ -77,13 +77,21 @@ export default function AdminMembers() {
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this member?')) return;
         try {
-            await fetch(`/api/members/${id}`, {
+            const res = await fetchWithRetry(`/api/members/${id}`, {
                 method: 'DELETE',
                 headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
             });
-            setSelectedMember(null);
-            fetchMembers();
-        } catch (e) { console.error(e); }
+            if (res.ok) {
+                setSelectedMember(null);
+                fetchMembers();
+            } else {
+                const data = await res.json();
+                alert(data.error || 'Failed to delete member');
+            }
+        } catch (e) {
+            console.error(e);
+            alert('An error occurred while deleting.');
+        }
     };
 
     const getInitials = (name) => {
@@ -160,7 +168,6 @@ export default function AdminMembers() {
                                     {m.fieldOfStudy || '-'} <br /> {m.yearOfStudy ? `Year ${m.yearOfStudy}` : ''}
                                 </td>
                                 <td style={{ padding: '16px 24px', textAlign: 'right' }}>
-                                    <button onClick={(e) => { e.stopPropagation(); }} style={{ background: 'none', border: 'none', color: 'var(--color-text-muted)', cursor: 'pointer', padding: '6px' }}><Edit2 size={16} /></button>
                                     <button onClick={(e) => { e.stopPropagation(); handleDelete(m.id); }} style={{ background: 'none', border: 'none', color: '#ff6b6b', cursor: 'pointer', padding: '6px', marginLeft: '8px' }}><Trash2 size={16} /></button>
                                 </td>
                             </tr>
