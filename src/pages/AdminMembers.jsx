@@ -13,6 +13,7 @@ export default function AdminMembers() {
         contactInfo: '', password: ''
     });
     const [isSaving, setIsSaving] = useState(false);
+    const [memberToDelete, setMemberToDelete] = useState(null);
 
     const fetchMembers = async () => {
         try {
@@ -74,8 +75,14 @@ export default function AdminMembers() {
         }
     };
 
-    const handleDelete = async (id) => {
-        if (!window.confirm('Are you sure you want to delete this member?')) return;
+    const confirmDelete = (id) => {
+        setMemberToDelete(id);
+    };
+
+    const handleDelete = async () => {
+        if (!memberToDelete) return;
+        const id = memberToDelete;
+        setMemberToDelete(null);
         try {
             const res = await fetchWithRetry(`/api/members/${id}`, {
                 method: 'DELETE',
@@ -168,7 +175,7 @@ export default function AdminMembers() {
                                     {m.fieldOfStudy || '-'} <br /> {m.yearOfStudy ? `Year ${m.yearOfStudy}` : ''}
                                 </td>
                                 <td style={{ padding: '16px 24px', textAlign: 'right' }}>
-                                    <button onClick={(e) => { e.stopPropagation(); handleDelete(m.id); }} style={{ background: 'none', border: 'none', color: '#ff6b6b', cursor: 'pointer', padding: '6px', marginLeft: '8px' }}><Trash2 size={16} /></button>
+                                    <button onClick={(e) => { e.stopPropagation(); confirmDelete(m.id); }} style={{ background: 'none', border: 'none', color: '#ff6b6b', cursor: 'pointer', padding: '6px', marginLeft: '8px' }}><Trash2 size={16} /></button>
                                 </td>
                             </tr>
                         ))}
@@ -330,7 +337,7 @@ export default function AdminMembers() {
                                 <Edit2 size={15} /> Edit
                             </button>
                             <button
-                                onClick={() => handleDelete(selectedMember.id)}
+                                onClick={() => confirmDelete(selectedMember.id)}
                                 className="btn"
                                 style={{
                                     flex: 1,
@@ -504,6 +511,69 @@ export default function AdminMembers() {
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </>
+            )}
+
+            {/* Delete Confirmation Modal */}
+            {memberToDelete && (
+                <>
+                    <div
+                        onClick={() => setMemberToDelete(null)}
+                        style={{
+                            position: 'fixed',
+                            inset: 0,
+                            background: 'rgba(0,0,0,0.5)',
+                            backdropFilter: 'blur(4px)',
+                            zIndex: 300,
+                            animation: 'fadeIn 0.25s ease',
+                        }}
+                    />
+                    <div
+                        style={{
+                            position: 'fixed',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            width: '90%',
+                            maxWidth: '400px',
+                            background: 'linear-gradient(180deg, rgba(15,20,25,0.98) 0%, rgba(10,14,18,0.99) 100%)',
+                            border: '1px solid var(--color-border)',
+                            borderRadius: '16px',
+                            zIndex: 301,
+                            padding: '24px',
+                            boxShadow: '0 24px 48px rgba(0,0,0,0.5)',
+                            animation: 'fadeIn 0.25s ease',
+                            textAlign: 'center'
+                        }}
+                    >
+                        <h2 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#fff', marginBottom: '16px' }}>Confirm Deletion</h2>
+                        <p style={{ color: 'var(--color-text-muted)', marginBottom: '24px' }}>
+                            Are you sure you want to delete this member? This action cannot be undone.
+                        </p>
+                        <div style={{ display: 'flex', justifyContent: 'center', gap: '12px' }}>
+                            <button
+                                onClick={() => setMemberToDelete(null)}
+                                className="btn btn-outline"
+                                style={{ padding: '10px 20px', borderRadius: '8px', flex: 1 }}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleDelete}
+                                className="btn"
+                                style={{
+                                    padding: '10px 20px',
+                                    borderRadius: '8px',
+                                    flex: 1,
+                                    background: 'rgba(255,107,107,0.12)',
+                                    color: '#ff6b6b',
+                                    border: '1px solid rgba(255,107,107,0.2)',
+                                }}
+                            >
+                                Delete
+                            </button>
+                        </div>
                     </div>
                 </>
             )}
