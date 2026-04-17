@@ -125,12 +125,12 @@ app.get('/api/members', authenticateToken, async (req, res) => {
     }
 });
 
-app.post('/api/members', authenticateToken, requireAdmin, async (req, res) => {
+app.post('/api/members', authenticateToken, async (req, res) => {
     try {
-        const { password, ...rest } = req.body;
+        const { password, role, ...rest } = req.body;
         const hashedPassword = await bcrypt.hash(password || 'member123', 10);
         const newMember = await prisma.member.create({
-            data: { ...rest, password: hashedPassword }
+            data: { ...rest, role: 'MEMBER', password: hashedPassword }
         });
         const { password: _, ...memberWithoutPassword } = newMember;
         res.json(memberWithoutPassword);

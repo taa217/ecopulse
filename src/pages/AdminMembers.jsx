@@ -395,7 +395,7 @@ export default function AdminMembers() {
                                     value={newMemberData.name}
                                     onChange={handleNameChange}
                                     style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--color-border)', color: '#fff' }}
-                                    placeholder="e.g. Jane Doe"
+                                    placeholder="e.g. Clyde Tadiwa"
                                 />
                             </div>
 
@@ -407,34 +407,21 @@ export default function AdminMembers() {
                                     value={newMemberData.email}
                                     onChange={(e) => setNewMemberData({ ...newMemberData, email: e.target.value })}
                                     style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--color-border)', color: '#fff' }}
-                                    placeholder="jane@example.com"
+                                    placeholder="clydetadiwa@example.com"
                                 />
                             </div>
 
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                                <div>
-                                    <label style={{ display: 'block', fontSize: '0.9rem', color: 'var(--color-text-muted)', marginBottom: '8px' }}>Default Password</label>
-                                    <input
-                                        type="text"
-                                        required
-                                        value={newMemberData.password}
-                                        onChange={(e) => setNewMemberData({ ...newMemberData, password: e.target.value })}
-                                        style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--color-border)', color: '#fff' }}
-                                    />
-                                    <div style={{ fontSize: '0.75rem', color: 'var(--color-primary-light)', marginTop: '4px' }}>
-                                        Defaults to first name.
-                                    </div>
-                                </div>
-                                <div>
-                                    <label style={{ display: 'block', fontSize: '0.9rem', color: 'var(--color-text-muted)', marginBottom: '8px' }}>Role</label>
-                                    <select
-                                        value={newMemberData.role}
-                                        onChange={(e) => setNewMemberData({ ...newMemberData, role: e.target.value })}
-                                        style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--color-border)', color: '#fff' }}
-                                    >
-                                        <option value="MEMBER">Member</option>
-                                        <option value="ADMIN">Admin</option>
-                                    </select>
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.9rem', color: 'var(--color-text-muted)', marginBottom: '8px' }}>Default Password</label>
+                                <input
+                                    type="text"
+                                    required
+                                    value={newMemberData.password}
+                                    onChange={(e) => setNewMemberData({ ...newMemberData, password: e.target.value })}
+                                    style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--color-border)', color: '#fff' }}
+                                />
+                                <div style={{ fontSize: '0.75rem', color: 'var(--color-primary-light)', marginTop: '4px' }}>
+                                    Defaults to first name.
                                 </div>
                             </div>
 
