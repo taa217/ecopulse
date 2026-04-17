@@ -16,15 +16,15 @@ function App() {
   return (
     <div className="app-container">
       {/* Navigation */}
-      <nav className={`glass ${scrolled ? 'scrolled' : ''}`} style={{ margin: scrolled ? '10px 24px' : '0', padding: scrolled ? '15px 24px' : '20px 48px', borderRadius: scrolled ? '20px' : '0', background: scrolled ? 'var(--color-surface)' : 'transparent', border: scrolled ? '1px solid var(--color-border)' : 'none', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }}>
+      <nav className={`glass main-nav ${scrolled ? 'scrolled' : ''}`}>
         <div className="nav-content container">
-          <div className="logo text-primary">
-            <img src={logoSvg} alt="EcoPulse" style={{ width: '36px', height: '36px' }} />
+          <Link to="/" className="logo text-primary">
+            <img src={logoSvg} alt="EcoPulse" className="logo-img" />
             <span>EcoPulse</span>
-          </div>
-          <div className="nav-links" style={{ display: 'flex', gap: '28px', alignItems: 'center', fontWeight: '500' }}>
-            <a href="/mission" style={{ transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color = 'var(--color-primary-light)'} onMouseOut={e => e.target.style.color = 'inherit'}>Mission</a>
-            <a href="#join" className="btn btn-primary" style={{ padding: '8px 20px', fontSize: '0.9rem' }}>Join Us</a>
+          </Link>
+          <div className="nav-links">
+            <Link to="/mission" className="nav-link">Mission</Link>
+            <a href="#join" className="btn btn-primary nav-join-btn">Join Us</a>
           </div>
         </div>
       </nav>

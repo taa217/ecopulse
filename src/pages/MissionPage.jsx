@@ -13,14 +13,14 @@ function MissionPage() {
     return (
         <div className="app-container" style={{ background: 'var(--color-bg)', minHeight: '100vh', color: 'var(--color-text)' }}>
             {/* Navigation */}
-            <nav className="glass" style={{ padding: '20px 48px', borderBottom: '1px solid var(--color-border)', position: 'sticky', top: 0, zIndex: 100 }}>
-                <div className="nav-content container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Link to="/" className="logo text-primary" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
-                        <img src={logoSvg} alt="EcoPulse" style={{ width: '36px', height: '36px' }} />
-                        <span style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>EcoPulse</span>
+            <nav className="glass mission-nav">
+                <div className="nav-content container">
+                    <Link to="/" className="logo text-primary">
+                        <img src={logoSvg} alt="EcoPulse" className="logo-img" />
+                        <span>EcoPulse</span>
                     </Link>
                     <div className="nav-links">
-                        <Link to="/" className="btn btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', fontSize: '0.9rem' }}>
+                        <Link to="/" className="btn btn-outline nav-join-btn" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                             <ArrowLeft size={16} /> Back to Home
                         </Link>
                     </div>
