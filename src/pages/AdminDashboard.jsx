@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
-import { Users, Lightbulb, LogOut, Menu, X } from 'lucide-react';
+import { Users, Lightbulb, Lock, LogOut, Menu, X } from 'lucide-react';
 import AdminMembers from './AdminMembers';
 import AdminIdeas from './AdminIdeas';
+import AdminChangePassword from './AdminChangePassword';
 import logoSvg from '../assets/logo.svg';
 
 export default function AdminDashboard() {
@@ -53,6 +54,14 @@ export default function AdminDashboard() {
                     }}>
                         <Lightbulb size={20} /> Projects & Ideas
                     </Link>
+                    <Link to="/admin/change-password" onClick={closeSidebar} style={{
+                        display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', borderRadius: '12px',
+                        color: isActive('change-password') ? 'var(--color-primary-light)' : 'var(--color-text-muted)',
+                        background: isActive('change-password') ? 'rgba(76, 175, 80, 0.1)' : 'transparent',
+                        textDecoration: 'none', transition: 'all 0.2s', fontWeight: '500'
+                    }}>
+                        <Lock size={20} /> Change Password
+                    </Link>
                 </nav>
 
                 <button onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', borderRadius: '12px', color: '#ff6b6b', textDecoration: 'none', transition: 'all 0.2s', background: 'transparent', border: 'none', cursor: 'pointer', textAlign: 'left', width: '100%', fontSize: '1rem', fontWeight: '500' }}>
@@ -74,6 +83,7 @@ export default function AdminDashboard() {
                     } />
                     <Route path="/members" element={<AdminMembers />} />
                     <Route path="/ideas" element={<AdminIdeas />} />
+                    <Route path="/change-password" element={<AdminChangePassword />} />
                 </Routes>
             </main>
         </div>
