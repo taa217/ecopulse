@@ -73,7 +73,7 @@ app.post('/api/auth/login', async (req, res) => {
 app.get('/api/members', authenticateToken, async (req, res) => {
     try {
         const members = await prisma.member.findMany({
-            select: { id: true, name: true, email: true, role: true, position: true, activityHistory: true, birthdays: true, contactInfo: true, fieldOfStudy: true, yearOfStudy: true, createdAt: true },
+            select: { id: true, name: true, email: true, role: true, position: true, activityHistory: true, birthdays: true, contactInfo: true, fieldOfStudy: true, yearOfStudy: true, registrationNumber: true, createdAt: true },
         });
         res.json(members);
     } catch (error) {

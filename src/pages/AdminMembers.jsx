@@ -47,7 +47,7 @@ export default function AdminMembers() {
                         <tr style={{ background: 'rgba(255,255,255,0.05)' }}>
                             <th style={{ padding: '16px 24px', color: 'var(--color-text-muted)', fontWeight: '500', fontSize: '0.9rem' }}>Name</th>
                             <th style={{ padding: '16px 24px', color: 'var(--color-text-muted)', fontWeight: '500', fontSize: '0.9rem' }}>Email & Role</th>
-                            <th style={{ padding: '16px 24px', color: 'var(--color-text-muted)', fontWeight: '500', fontSize: '0.9rem' }}>Study / Year</th>
+                            <th style={{ padding: '16px 24px', color: 'var(--color-text-muted)', fontWeight: '500', fontSize: '0.9rem' }}>Program</th>
                             <th style={{ padding: '16px 24px', color: 'var(--color-text-muted)', fontWeight: '500', fontSize: '0.9rem', textAlign: 'right' }}>Actions</th>
                         </tr>
                     </thead>
