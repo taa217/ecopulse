@@ -211,7 +211,7 @@ function App() {
 
             <div style={{ position: 'relative', zIndex: 1 }}>
               <h2 style={{ fontSize: '3.2rem', marginBottom: '20px', letterSpacing: '-0.02em' }}>Ready to make an impact?</h2>
-              <p style={{ color: 'var(--color-text-muted)', marginBottom: '40px', fontSize: '1.2rem', maxWidth: '500px', margin: '0 auto 40px' }}>Sign up to be notified about our next meeting, community events, and leadership opportunities.</p>
+              <p style={{ color: 'var(--color-text-muted)', marginBottom: '40px', fontSize: '1.2rem', maxWidth: '500px', margin: '0 auto 40px' }}>Register your interest to join the club! Enter your email below to get started, and we'll be in touch with details on how to get involved.</p>
 
               <AnimatePresence mode="wait">
                 {status === 'success' ? (
