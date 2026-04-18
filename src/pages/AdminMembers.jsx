@@ -405,12 +405,6 @@ export default function AdminMembers() {
                             gap: '12px',
                         }}>
                             <button
-                                className="btn btn-outline"
-                                style={{ flex: 1, borderRadius: '12px', padding: '10px', fontSize: '0.9rem' }}
-                            >
-                                <Edit2 size={15} /> Edit
-                            </button>
-                            <button
                                 onClick={() => confirmDelete(selectedMember.id)}
                                 className="btn"
                                 style={{
