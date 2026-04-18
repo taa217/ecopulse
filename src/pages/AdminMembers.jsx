@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Edit2, Trash2, X, Mail, Phone, BookOpen, Calendar, Hash, Shield, User, Briefcase, Rocket, Users } from 'lucide-react';
+import { Plus, Edit2, Trash2, X, Mail, Phone, BookOpen, Calendar, Hash, Shield, User, Briefcase, Rocket, Users, ChevronRight } from 'lucide-react';
 import { fetchWithRetry } from '../utils/fetchWithRetry';
 
 export default function AdminMembers() {
@@ -178,6 +178,7 @@ export default function AdminMembers() {
                             <tr
                                 key={m.id}
                                 onClick={() => setSelectedMember(m)}
+                                title="Click to view member details"
                                 style={{
                                     borderTop: '1px solid var(--color-border)',
                                     cursor: 'pointer',
@@ -199,7 +200,12 @@ export default function AdminMembers() {
                                     {m.fieldOfStudy || '-'} <br /> {m.yearOfStudy ? `Year ${m.yearOfStudy}` : ''}
                                 </td>
                                 <td style={{ padding: '16px 24px', textAlign: 'right' }}>
-                                    <button onClick={(e) => { e.stopPropagation(); confirmDelete(m.id); }} style={{ background: 'none', border: 'none', color: '#ff6b6b', cursor: 'pointer', padding: '6px', marginLeft: '8px' }}><Trash2 size={16} /></button>
+                                    <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '16px' }}>
+                                        <div style={{ fontSize: '0.85rem', color: 'var(--color-primary-light)', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: '500' }}>
+                                            View Details <ChevronRight size={16} />
+                                        </div>
+                                        <button onClick={(e) => { e.stopPropagation(); confirmDelete(m.id); }} style={{ background: 'none', border: 'none', color: '#ff6b6b', cursor: 'pointer', padding: '6px' }} title="Delete member"><Trash2 size={16} /></button>
+                                    </div>
                                 </td>
                             </tr>
                         ))}

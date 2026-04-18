@@ -171,7 +171,7 @@ export default function AdminIdeas() {
 
                             <div style={{ marginBottom: '24px' }}>
                                 <label style={{ display: 'block', marginBottom: '8px', color: 'var(--color-text-muted)' }}>Timeline Info</label>
-                                <input type="text" value={formData.timeline} onChange={e => setFormData({ ...formData, timeline: e.target.value })} className="input-field" placeholder="E.g. Q3 2026 or Spring Semester" style={{ width: '100%', padding: '12px 16px', borderRadius: '12px', boxSizing: 'border-box' }} />
+                                <input type="text" value={formData.timeline} onChange={e => setFormData({ ...formData, timeline: e.target.value })} className="input-field" placeholder="E.g. Q3 2026 or Second Semester" style={{ width: '100%', padding: '12px 16px', borderRadius: '12px', boxSizing: 'border-box' }} />
                             </div>
 
                             <div style={{ marginBottom: '32px' }}>
