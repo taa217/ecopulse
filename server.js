@@ -141,7 +141,17 @@ app.post('/api/members', authenticateToken, async (req, res) => {
 
 app.get('/api/members/:id', authenticateToken, async (req, res) => {
     try {
-        const member = await prisma.member.findUnique({ where: { id: req.params.id } });
+        const member = await prisma.member.findUnique({
+            where: { id: req.params.id },
+            include: {
+                ideas: {
+                    select: { id: true, projectName: true, description: true, createdAt: true }
+                },
+                collaboratedIdeas: {
+                    select: { id: true, projectName: true, description: true, createdAt: true }
+                }
+            }
+        });
         if (!member) return res.status(404).json({ error: 'Member not found' });
         const { password: _, ...memberWithoutPassword } = member;
         res.json(memberWithoutPassword);
@@ -170,7 +180,15 @@ app.put('/api/members/:id', authenticateToken, async (req, res) => {
         }
         const updatedMember = await prisma.member.update({
             where: { id: req.params.id },
-            data: updateData
+            data: updateData,
+            include: {
+                ideas: {
+                    select: { id: true, projectName: true, description: true, createdAt: true }
+                },
+                collaboratedIdeas: {
+                    select: { id: true, projectName: true, description: true, createdAt: true }
+                }
+            }
         });
         const { password: _, ...memberWithoutPassword } = updatedMember;
         res.json(memberWithoutPassword);

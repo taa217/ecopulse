@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { User, Mail, Phone, BookOpen, Calendar, Briefcase, Hash, Shield, Save, X, Edit2 } from 'lucide-react';
+import { User, Mail, Phone, BookOpen, Calendar, Briefcase, Hash, Shield, Save, X, Edit2, Rocket, Users, FileText } from 'lucide-react';
 import '../index.css';
 
 export default function AdminProfile() {
@@ -9,6 +9,13 @@ export default function AdminProfile() {
     const [isEditing, setIsEditing] = useState(false);
     const [editForm, setEditForm] = useState({});
     const [saving, setSaving] = useState(false);
+
+    const projectTimeline = React.useMemo(() => {
+        if (!profile) return [];
+        const created = (profile.ideas || []).map(idea => ({ ...idea, type: 'created' }));
+        const collaborated = (profile.collaboratedIdeas || []).map(idea => ({ ...idea, type: 'collaborated' }));
+        return [...created, ...collaborated].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    }, [profile]);
 
     // Retrieve logged in user from localStorage
     const loggedInUserStr = localStorage.getItem('adminUser');
@@ -206,21 +213,67 @@ export default function AdminProfile() {
 
                 {/* Full-width descriptions */}
                 <div style={{ marginTop: '32px' }}>
-                    <DetailItem icon={<Shield />} label="Activity History">
+                    <DetailItem icon={<FileText />} label="Bio / Personal Notes">
                         {isEditing ? (
                             <textarea
                                 name="activityHistory"
                                 value={editForm.activityHistory || ''}
                                 onChange={handleChange}
                                 style={{ ...inputStyle, minHeight: '100px', resize: 'vertical' }}
-                                placeholder="Describe your activity history..."
+                                placeholder="Write something about yourself..."
                             />
                         ) : (
                             <div style={{ color: profile.activityHistory ? '#fff' : 'var(--color-text-muted)', lineHeight: '1.6', whiteSpace: 'pre-wrap', background: 'rgba(0,0,0,0.1)', padding: '16px', borderRadius: '12px' }}>
-                                {profile.activityHistory || 'No activity history recorded.'}
+                                {profile.activityHistory || 'No bio provided.'}
                             </div>
                         )}
                     </DetailItem>
+                </div>
+
+                {/* Project History Timeline */}
+                <div style={{ marginTop: '40px' }}>
+                    <h3 style={{ fontSize: '1.4rem', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '16px', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <Shield size={20} /> Project History Timeline
+                    </h3>
+
+                    {projectTimeline.length > 0 ? (
+                        <div style={{ position: 'relative', paddingLeft: '24px' }}>
+                            {/* Professional Timeline vertical line */}
+                            <div style={{ position: 'absolute', left: '7px', top: '8px', bottom: '0', width: '2px', background: 'rgba(255,255,255,0.1)' }}></div>
+
+                            {projectTimeline.map((item, index) => (
+                                <div key={item.id} style={{ position: 'relative', marginBottom: index !== projectTimeline.length - 1 ? '32px' : '0' }}>
+                                    {/* Timeline dot */}
+                                    <div style={{ position: 'absolute', left: '-22.5px', top: '4px', width: '12px', height: '12px', borderRadius: '50%', background: item.type === 'created' ? 'var(--color-primary)' : '#4dabf7', border: '2px solid #1a1a1a' }}></div>
+
+                                    <div style={{ background: 'rgba(0,0,0,0.2)', padding: '20px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', transition: 'transform 0.2s', cursor: 'default' }}
+                                        onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+                                        onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
+                                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
+                                            <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: item.type === 'created' ? 'rgba(76, 175, 80, 0.1)' : 'rgba(77, 171, 247, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: item.type === 'created' ? 'var(--color-primary-light)' : '#4dabf7', flexShrink: 0 }}>
+                                                {item.type === 'created' ? <Rocket size={24} /> : <Users size={24} />}
+                                            </div>
+                                            <div>
+                                                <h4 style={{ margin: '0 0 4px 0', fontSize: '1.2rem', color: '#fff' }}>
+                                                    {item.projectName}
+                                                </h4>
+                                                <div style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', marginBottom: '12px', fontWeight: '500' }}>
+                                                    {item.type === 'created' ? 'Worked on project' : 'Collaborated on project'} • {new Date(item.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
+                                                </div>
+                                                <p style={{ margin: 0, fontSize: '0.95rem', color: '#ddd', lineHeight: '1.5' }}>
+                                                    {item.description}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div style={{ color: 'var(--color-text-muted)', padding: '24px', background: 'rgba(0,0,0,0.1)', borderRadius: '12px', textAlign: 'center', border: '1px dashed rgba(255,255,255,0.1)' }}>
+                            No project history to display yet. Create or collaborate on a project to see your activity here!
+                        </div>
+                    )}
                 </div>
 
             </div>
