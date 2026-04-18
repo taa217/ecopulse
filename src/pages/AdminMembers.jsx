@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Edit2, Trash2, X, Mail, Phone, BookOpen, Calendar, Hash, Shield, User, Briefcase } from 'lucide-react';
+import { Plus, Edit2, Trash2, X, Mail, Phone, BookOpen, Calendar, Hash, Shield, User, Briefcase, Rocket, Users } from 'lucide-react';
 import { fetchWithRetry } from '../utils/fetchWithRetry';
 
 export default function AdminMembers() {
@@ -14,6 +14,30 @@ export default function AdminMembers() {
     });
     const [isSaving, setIsSaving] = useState(false);
     const [memberToDelete, setMemberToDelete] = useState(null);
+
+    useEffect(() => {
+        if (selectedMember && !selectedMember.ideas) {
+            const fetchDetails = async () => {
+                try {
+                    const res = await fetchWithRetry(`/api/members/${selectedMember.id}`, {
+                        headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        setSelectedMember(prev => prev?.id === data.id ? { ...prev, ...data } : prev);
+                    }
+                } catch (e) { console.error('Failed to fetch details', e); }
+            };
+            fetchDetails();
+        }
+    }, [selectedMember]);
+
+    const projectTimeline = React.useMemo(() => {
+        if (!selectedMember) return [];
+        const created = (selectedMember.ideas || []).map(idea => ({ ...idea, type: 'created' }));
+        const collaborated = (selectedMember.collaboratedIdeas || []).map(idea => ({ ...idea, type: 'collaborated' }));
+        return [...created, ...collaborated].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    }, [selectedMember]);
 
     const fetchMembers = async () => {
         try {
@@ -321,6 +345,50 @@ export default function AdminMembers() {
                                     </p>
                                 </DetailSection>
                             )}
+
+                            {/* Project History Timeline */}
+                            <div style={{ marginTop: '32px' }}>
+                                <h3 style={{ fontSize: '1.2rem', color: '#fff', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '16px', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <Shield size={18} /> Project History Timeline
+                                </h3>
+
+                                {projectTimeline.length > 0 ? (
+                                    <div style={{ position: 'relative', paddingLeft: '24px' }}>
+                                        <div style={{ position: 'absolute', left: '7px', top: '8px', bottom: '0', width: '2px', background: 'rgba(255,255,255,0.1)' }}></div>
+
+                                        {projectTimeline.map((item, index) => (
+                                            <div key={item.id} style={{ position: 'relative', marginBottom: index !== projectTimeline.length - 1 ? '32px' : '0' }}>
+                                                <div style={{ position: 'absolute', left: '-22.5px', top: '4px', width: '12px', height: '12px', borderRadius: '50%', background: item.type === 'created' ? 'var(--color-primary)' : '#4dabf7', border: '2px solid #1a1a1a' }}></div>
+
+                                                <div style={{ background: 'rgba(0,0,0,0.2)', padding: '20px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', transition: 'transform 0.2s', cursor: 'default' }}
+                                                    onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+                                                    onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
+                                                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
+                                                        <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: item.type === 'created' ? 'rgba(76, 175, 80, 0.1)' : 'rgba(77, 171, 247, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: item.type === 'created' ? 'var(--color-primary-light)' : '#4dabf7', flexShrink: 0 }}>
+                                                            {item.type === 'created' ? <Rocket size={24} /> : <Users size={24} />}
+                                                        </div>
+                                                        <div>
+                                                            <h4 style={{ margin: '0 0 4px 0', fontSize: '1.1rem', color: '#fff' }}>
+                                                                {item.projectName}
+                                                            </h4>
+                                                            <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '12px', fontWeight: '500' }}>
+                                                                {item.type === 'created' ? 'Worked on project' : 'Collaborated on project'} • {new Date(item.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
+                                                            </div>
+                                                            <p style={{ margin: 0, fontSize: '0.9rem', color: '#ddd', lineHeight: '1.5' }}>
+                                                                {item.description}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div style={{ color: 'var(--color-text-muted)', padding: '24px', background: 'rgba(0,0,0,0.1)', borderRadius: '12px', textAlign: 'center', border: '1px dashed rgba(255,255,255,0.1)', fontSize: '0.9rem' }}>
+                                        No project history yet.
+                                    </div>
+                                )}
+                            </div>
                         </div>
 
                         {/* Footer Actions */}
