@@ -114,19 +114,27 @@ export default function AdminIdeas() {
                         </p>
 
                         <div style={{ borderTop: '1px solid var(--color-border)', paddingTop: '16px', display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.85rem' }}>
-                            <div>
-                                <span style={{ color: 'var(--color-text-muted)', display: 'block', marginBottom: '6px' }}>Collaborators:</span>
-                                {idea.collaborators && idea.collaborators.length > 0 ? (
-                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                                        {idea.collaborators.map(c => (
-                                            <span key={c.id} style={{ background: 'rgba(76, 175, 80, 0.15)', color: 'var(--color-primary-light)', padding: '4px 10px', borderRadius: '12px', fontSize: '0.8rem' }}>
-                                                {c.name}
-                                            </span>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <span style={{ color: 'var(--color-text-muted)' }}>No tagged team members</span>
-                                )}
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+                                <div style={{ flex: 1, minWidth: '120px' }}>
+                                    <span style={{ color: 'var(--color-text-muted)', display: 'block', marginBottom: '6px' }}>Author:</span>
+                                    <span style={{ display: 'inline-block', background: 'rgba(59, 130, 246, 0.15)', color: '#60a5fa', padding: '4px 10px', borderRadius: '12px', fontSize: '0.8rem' }}>
+                                        {idea.member ? idea.member.name : 'Unknown Author'}
+                                    </span>
+                                </div>
+                                <div style={{ flex: 2 }}>
+                                    <span style={{ color: 'var(--color-text-muted)', display: 'block', marginBottom: '6px' }}>Collaborators:</span>
+                                    {idea.collaborators && idea.collaborators.length > 0 ? (
+                                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                                            {idea.collaborators.map(c => (
+                                                <span key={c.id} style={{ background: 'rgba(76, 175, 80, 0.15)', color: 'var(--color-primary-light)', padding: '4px 10px', borderRadius: '12px', fontSize: '0.8rem' }}>
+                                                    {c.name}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <span style={{ color: 'var(--color-text-muted)' }}>No tagged team members</span>
+                                    )}
+                                </div>
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <span style={{ color: 'var(--color-text-muted)' }}>Timeline</span>
