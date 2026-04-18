@@ -163,8 +163,8 @@ export default function AdminMembers() {
                 <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                     <thead>
                         <tr style={{ background: 'rgba(255,255,255,0.05)' }}>
-                            <th style={{ padding: '16px 24px', color: 'var(--color-text-muted)', fontWeight: '500', fontSize: '0.9rem' }}>Name</th>
-                            <th style={{ padding: '16px 24px', color: 'var(--color-text-muted)', fontWeight: '500', fontSize: '0.9rem' }}>Email & Role</th>
+                            <th style={{ padding: '16px 24px', color: 'var(--color-text-muted)', fontWeight: '500', fontSize: '0.9rem' }}>Name & Role</th>
+                            <th style={{ padding: '16px 24px', color: 'var(--color-text-muted)', fontWeight: '500', fontSize: '0.9rem' }}>Email & Position</th>
                             <th style={{ padding: '16px 24px', color: 'var(--color-text-muted)', fontWeight: '500', fontSize: '0.9rem' }}>Program</th>
                             <th style={{ padding: '16px 24px', color: 'var(--color-text-muted)', fontWeight: '500', fontSize: '0.9rem', textAlign: 'right' }}>Actions</th>
                         </tr>
@@ -190,11 +190,11 @@ export default function AdminMembers() {
                             >
                                 <td style={{ padding: '16px 24px' }}>
                                     <div style={{ fontWeight: '500', color: '#fff' }}>{m.name}</div>
-                                    <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginTop: '4px' }}>{m.position || 'Member'}</div>
+                                    <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginTop: '4px' }}>{m.role}</div>
                                 </td>
                                 <td style={{ padding: '16px 24px' }}>
                                     <div>{m.email}</div>
-                                    <span style={{ display: 'inline-block', padding: '2px 8px', borderRadius: '20px', fontSize: '0.75rem', background: m.role === 'ADMIN' ? 'rgba(76, 175, 80, 0.2)' : 'rgba(255,255,255,0.1)', color: m.role === 'ADMIN' ? 'var(--color-primary-light)' : '#aaa', marginTop: '4px' }}>{m.role}</span>
+                                    <span style={{ display: 'inline-block', padding: '2px 8px', borderRadius: '20px', fontSize: '0.75rem', background: m.role === 'ADMIN' ? 'rgba(76, 175, 80, 0.2)' : 'rgba(255,255,255,0.1)', color: m.role === 'ADMIN' ? 'var(--color-primary-light)' : '#aaa', marginTop: '4px' }}>{m.position || 'Member'}</span>
                                 </td>
                                 <td style={{ padding: '16px 24px', color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
                                     {m.fieldOfStudy || '-'} <br /> {m.yearOfStudy ? `Year ${m.yearOfStudy}` : ''}
