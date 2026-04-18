@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Leaf, Globe, Users, ArrowRight, ChevronDown, Mail, MapPin } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Leaf, Globe, Users, ArrowRight, ChevronDown, Mail, MapPin, CheckCircle, XCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import logoSvg from '../assets/logo.svg';
 
 function App() {
   const [scrolled, setScrolled] = useState(false);
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState('idle'); // 'idle', 'loading', 'success', 'error'
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -210,10 +213,82 @@ function App() {
               <h2 style={{ fontSize: '3.2rem', marginBottom: '20px', letterSpacing: '-0.02em' }}>Ready to make an impact?</h2>
               <p style={{ color: 'var(--color-text-muted)', marginBottom: '40px', fontSize: '1.2rem', maxWidth: '500px', margin: '0 auto 40px' }}>Sign up to be notified about our next meeting, community events, and leadership opportunities.</p>
 
-              <form onSubmit={(e) => { e.preventDefault(); alert("Thanks for joining! We'll be in touch."); e.target.reset(); }} style={{ display: 'flex', gap: '16px', maxWidth: '500px', margin: '0 auto', position: 'relative' }}>
-                <input type="email" placeholder="Enter your student email..." required style={{ flex: 1, paddingRight: '140px' }} />
-                <button type="submit" className="btn btn-primary" style={{ position: 'absolute', right: '6px', top: '6px', bottom: '6px', padding: '0 24px', whiteSpace: 'nowrap', borderRadius: '8px' }}>Sign Up</button>
-              </form>
+              <AnimatePresence mode="wait">
+                {status === 'success' ? (
+                  <motion.div
+                    key="success"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    style={{ background: 'rgba(76, 175, 80, 0.15)', border: '1px solid rgba(76, 175, 80, 0.3)', padding: '20px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', color: 'var(--color-primary-light)', maxWidth: '500px', margin: '0 auto' }}
+                  >
+                    <CheckCircle size={24} />
+                    <span>Thanks for joining! We'll be in touch soon.</span>
+                  </motion.div>
+                ) : (
+                  <motion.form
+                    key="form"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    onSubmit={async (e) => {
+                      e.preventDefault();
+                      setStatus('loading');
+                      try {
+                        const response = await fetch('http://localhost:3000/api/newsletter', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ email })
+                        });
+                        const data = await response.json();
+                        if (response.ok) {
+                          setStatus('success');
+                          setEmail('');
+                        } else {
+                          setStatus('error');
+                          setErrorMessage(data.error || 'Something went wrong.');
+                        }
+                      } catch (error) {
+                        setStatus('error');
+                        setErrorMessage('Failed to connect to the server.');
+                      }
+                    }}
+                    style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '500px', margin: '0 auto' }}
+                  >
+                    <div style={{ display: 'flex', gap: '16px', position: 'relative' }}>
+                      <input
+                        type="email"
+                        placeholder="Enter your email..."
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        disabled={status === 'loading'}
+                        style={{ flex: 1, paddingRight: '140px' }}
+                      />
+                      <button
+                        type="submit"
+                        className="btn btn-primary"
+                        disabled={status === 'loading'}
+                        style={{ position: 'absolute', right: '6px', top: '6px', bottom: '6px', padding: '0 24px', whiteSpace: 'nowrap', borderRadius: '8px' }}
+                      >
+                        {status === 'loading' ? 'Joining...' : 'Sign Up'}
+                      </button>
+                    </div>
+                    <AnimatePresence>
+                      {status === 'error' && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          style={{ color: '#ff5252', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.9rem', marginTop: '4px' }}
+                        >
+                          <XCircle size={16} /> {errorMessage}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.form>
+                )}
+              </AnimatePresence>
             </div>
           </motion.div>
         </div>

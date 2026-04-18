@@ -43,3 +43,9 @@ enum Role {
   ADMIN
   MEMBER
 }
+
+model Subscriber {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}

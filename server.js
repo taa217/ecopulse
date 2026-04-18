@@ -277,6 +277,32 @@ app.delete('/api/ideas/:id', authenticateToken, requireAdmin, async (req, res) =
     }
 });
 
+// --- Newsletter API ---
+app.post('/api/newsletter', async (req, res) => {
+    try {
+        const { email } = req.body;
+        if (!email) {
+            return res.status(400).json({ error: 'Email is required' });
+        }
+
+        // We can just use prisma.subscriber.create
+        // If the email already exists, it will throw a unique constraint error
+        // which our formatErrorResponse handles, but let's give a nice message directly.
+        const existing = await prisma.subscriber.findUnique({ where: { email } });
+        if (existing) {
+            return res.status(400).json({ error: 'This email is already subscribed.' });
+        }
+
+        await prisma.subscriber.create({
+            data: { email }
+        });
+
+        res.json({ success: true, message: 'Subscribed successfully!' });
+    } catch (error) {
+        formatErrorResponse(res, error);
+    }
+});
+
 if (process.env.NODE_ENV !== 'production') {
     app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
